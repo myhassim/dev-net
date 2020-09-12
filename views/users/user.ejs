@@ -1,0 +1,49 @@
+<%- include('../partials/header.ejs') %> 
+<div class="container mt-5">
+    <div class="row justify-content-center">
+            <div class="user-card my-2 mx-3 col-sm-3">
+                <h3 class="text-center "><%= user.username %> </h3>
+                <div class="avatar">
+                    <img class="card-img" src="<%= user.avatar %> " alt="">
+                </div>
+            </div>
+    </div>
+    <% if (currentUser && user._id.equals(currentUser._id)){ %>
+        <div class="my-btn-group d-flex justify-content-center">
+            <a class="btn btn-outline-warning" href="/users/<%= user._id%>/projects/new">Add</a>
+            <a class="btn btn-outline-warning" href="/users/<%= user._id%>/edit">Edit</a>
+            <form action="/users/<%= user._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-outline-danger">Delete</button>
+            </form>
+        </div>
+    <% } %> 
+ 
+
+  <h3>Projects: </h3>
+  <div class="row justify-content-center">
+      <% user.projects.forEach(project => { %>
+        <div class=" my-2 mx-3 col-sm-3">
+        <a  href="<%= project.url %> ">
+            <div class="user-card">
+                <h3 class="text-center "><%= project.title %> </h3>
+                <div class="avatar">
+                    <img class="card-img" src="<%= project.thumbnail %> " alt="">
+                </div>
+            </div>
+        </a>
+        <% if (currentUser && user._id.equals(currentUser._id)) { %>
+            <div class="my-btn-group d-flex justify-content-center">
+                <a class="btn btn-outline-warning" href="/users/<%=user._id%>/projects/<%=project._id%>/edit">Edit</a>
+                <form action="/users/<%=user._id%>/projects/<%=project._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-outline-danger">Delete</button>
+                </form>
+            </div>
+            <% } %> 
+   
+    </div>
+      <% }) %>
+
+</div>
+</div>
+
+<%- include('../partials/footer.ejs') %>
