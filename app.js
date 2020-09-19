@@ -3,6 +3,7 @@
 // https://www.figma.com/file/kMMxw9RjTrrIgvDXfIzNtc/Untitled?node-id=0%3A1 sign up
 // https://www.figma.com/file/D2gYAvIDCX6r8kZQwbEFg3/Untitled User
 // requires
+ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
@@ -11,9 +12,11 @@ const methodOverride = require('method-override')
 const User = require('./models/User.js')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-//connect to data base
+const dbUrl = process.env.LOCAL_DB||process.env.PRODUCTION_DB
+
+// connect to data base
 mongoose.connect(
-	'mongodb://localhost:27017/dev-net',
+	dbUrl,
 	{
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
