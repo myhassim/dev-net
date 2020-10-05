@@ -13,7 +13,7 @@ const User = require('./models/User.js')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const dbUrl = process.env.LOCAL_DB||process.env.PRODUCTION_DB
-
+const port = process.env.PORT || 3000
 // connect to data base
 mongoose.connect(
 	dbUrl,
@@ -66,4 +66,4 @@ app.use('/users/:id/projects', projectRoutes)
 app.use('/session', sessionRoutes)
 
 //sever start
-app.listen(3000, () => console.log('sever has started'))
+app.listen(port, () => console.log('sever has started'))
