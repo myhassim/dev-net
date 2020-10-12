@@ -39,3 +39,19 @@
         </div>
       </nav>
       
+<% if (success != '') { %>
+ <div class="alert alert-dismissible alert-success fade show" role="alert">
+   <%= success %> 
+   <button class="close" type="button" data-dismiss="alert" aria-label="Close" >
+     <span aria-hidden="true">&times;</span>
+   </button>
+ </div>
+<% } %>
+<% if (error != '') { %>
+  <div class="alert alert-danger alert-dismissible  fade show" role="alert">
+    <%= error %> 
+    <button class="close" type="button" data-dismiss="alert" aria-label="Close" >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+ <% } %>

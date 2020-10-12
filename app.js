@@ -14,6 +14,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const dbUrl = process.env.LOCAL_DB||process.env.PRODUCTION_DB
 const port = process.env.PORT || 3000
+const flash = require('connect-flash')
 // connect to data base
 mongoose.connect(
 	dbUrl,
@@ -45,8 +46,15 @@ passport.use(new LocalStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
+
+
+app.use(flash())
+
 //set locals
 const setLocals = (req, res, next) => {
+	res.locals.success =req.flash('success')
+	res.locals.error =req.flash('error')
+
 	res.locals.currentUser = req.user
 	next()
 }

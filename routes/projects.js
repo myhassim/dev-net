@@ -37,11 +37,13 @@ router.post('/', isCurrentUser, (req, res) => {
 						{ new: true }
 					)
 					.then((user) => {
+						req.flash('success','Project crated')
 						res.redirect(`/users/${req.params.id}`)
 					})
 			})
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -53,6 +55,7 @@ router.get('/:project_id/edit', checkProjectOwnership, (req, res) => {
 			res.status(200).render('projects/edit', { project: project, userId: userId })
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -60,9 +63,11 @@ router.get('/:project_id/edit', checkProjectOwnership, (req, res) => {
 router.put('/:project_id', checkProjectOwnership, (req, res) => {
 	Project.findByIdAndUpdate(req.params.project_id, req.body, { new: true })
 		.then(() => {
+			req.flash('success','Project Updated')
 			res.status(200).redirect(`/users/${req.params.id}`)
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -74,10 +79,12 @@ router.delete('/:project_id', checkProjectOwnership, (req, res) => {
 			User.findByIdAndUpdate(req.params.id, {
 				$pull: { projects: req.params.project_id }
 			}).then((User) => {
+				req.flash('success','Deleted')
 				res.status(200).redirect(`/users/${req.params.id}`)
 			})
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })

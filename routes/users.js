@@ -9,10 +9,11 @@ const router = express.Router()
 //Get all users
 router.get('/', (req, res) => {
 	User.find({})
-		.then((users) => {
+		.then((users) => {	
 			res.status(200).render('users/index', { users: users })
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -29,11 +30,13 @@ router.post('/', (req, res) => {
 	User.register(newUser, password)
 		.then((newUser) => {
 			passport.authenticate('local')(req, res, () => {
+				req.flash('success','welcome to dev-net')
 				res.redirect('/users')
 			})
 		})
 		.catch((err) => {
-			res.status(422).json(err)
+			req.flash('error',err.message)
+			res.status(422).redirect('back')
 		})
 })
 
@@ -45,6 +48,7 @@ router.get('/:id', (req, res) => {
 			res.status(200).render('users/user', { user: user })
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -56,6 +60,7 @@ router.get('/:id/edit', isCurrentUser, (req, res) => {
 			console.log(user)
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -63,9 +68,11 @@ router.get('/:id/edit', isCurrentUser, (req, res) => {
 router.put('/:id', isCurrentUser, (req, res) => {
 	User.findByIdAndUpdate(req.params.id, req.body, { new: true })
 		.then(() => {
+			req.flash('success','User Updated')
 			res.status(200).redirect(`/users/${req.params.id}`)
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
@@ -74,10 +81,12 @@ router.delete('/:id', isCurrentUser, (req, res) => {
 	User.findByIdAndDelete(req.params.id)
 		.then((deletedUser) => {
 			Project.deleteMany({ _id: { $in: deletedUser.projects } }).then(() => {
+				req.flash('success','User Deleted')
 				res.status(200).redirect('/users')
 			})
 		})
 		.catch((err) => {
+			req.flash('error',err.message)
 			res.status(400).json(err)
 		})
 })
